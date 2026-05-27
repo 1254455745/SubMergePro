@@ -392,6 +392,7 @@ final class SubMergeViewModel: ObservableObject {
 
     private func prepareStylePreview(useProjectVideo: Bool) {
         previewImage = nil
+        previewIsRendering = false
         previewRenderError = nil
         previewCues = []
         previewDuration = 0
@@ -409,6 +410,7 @@ final class SubMergeViewModel: ObservableObject {
     private func prepareVideoPreview(for item: VideoItem) {
         previewItem = item
         previewImage = nil
+        previewIsRendering = false
         previewRenderError = nil
         previewCues = item.subtitleURL.map { SubtitlePreviewService.loadCues(from: $0) } ?? []
         previewDuration = max(item.durationSeconds, 1)

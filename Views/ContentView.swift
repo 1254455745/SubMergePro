@@ -1117,10 +1117,7 @@ private struct StyledSubtitleTextPreview: View {
         ZStack {
             ZStack {
                 ZStack {
-                    ForEach(Array(outlineOffsets.enumerated()), id: \.offset) { _, offset in
-                        textLayer(color: outlineColor)
-                            .offset(x: offset.width, y: offset.height)
-                    }
+                    outlinePreviewLayer
 
                     textLayer(color: textColor)
                         .shadow(
@@ -1140,6 +1137,23 @@ private struct StyledSubtitleTextPreview: View {
                 }
             }
         }
+    }
+
+    private var outlinePreviewLayer: some View {
+        ZStack {
+            ForEach(Array(outlineOffsets.enumerated()), id: \.offset) { _, offset in
+                textLayer(color: outlineColor)
+                    .offset(x: offset.width, y: offset.height)
+            }
+        }
+        .compositingGroup()
+        .overlay {
+            if !outlineOffsets.isEmpty {
+                textLayer(color: .white)
+                    .blendMode(.destinationOut)
+            }
+        }
+        .compositingGroup()
     }
 
     private func textLayer(color: Color) -> some View {
