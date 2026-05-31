@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: help doctor open build xcode-build release clean
+.PHONY: help doctor open build test xcode-build release clean
 
 help:
 	@echo "SubMergePro commands"
@@ -8,6 +8,7 @@ help:
 	@echo "  make doctor       Check local development tools"
 	@echo "  make open         Open the Xcode project"
 	@echo "  make build        Build with Swift Package Manager"
+	@echo "  make test         Run Swift tests"
 	@echo "  make xcode-build  Build the Xcode macOS app"
 	@echo "  make release      Build zip and dmg release artifacts"
 	@echo "  make clean        Remove local build outputs"
@@ -20,6 +21,9 @@ open:
 
 build:
 	@swift build
+
+test:
+	@swift test
 
 xcode-build:
 	@xcodebuild \

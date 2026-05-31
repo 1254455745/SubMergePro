@@ -19,6 +19,34 @@ actor FFmpegService {
         var lines: [String] = []
     }
 
+    nonisolated static func availableFFmpegURL() -> URL? {
+        let candidates = ffmpegCandidatePaths()
+        for path in candidates where FileManager.default.isExecutableFile(atPath: path) {
+            return URL(fileURLWithPath: path)
+        }
+        return nil
+    }
+
+    nonisolated static func ffmpegCandidatePaths() -> [String] {
+        let bundled = Bundle.main.url(forResource: "ffmpeg", withExtension: nil)?.path
+        let envCandidates = (ProcessInfo.processInfo.environment["PATH"] ?? "")
+            .split(separator: ":")
+            .map { String($0) + "/ffmpeg" }
+
+        let defaults = [
+            "/opt/homebrew/bin/ffmpeg",
+            "/usr/local/bin/ffmpeg",
+            "/usr/bin/ffmpeg"
+        ]
+
+        var seen = Set<String>()
+        return ([bundled].compactMap { $0 } + envCandidates + defaults).filter { path in
+            guard !seen.contains(path) else { return false }
+            seen.insert(path)
+            return true
+        }
+    }
+
     func cancelCurrentTask() {
         process?.terminate()
         process = nil
@@ -204,18 +232,7 @@ actor FFmpegService {
     }
 
     private func resolveFFmpegURL() throws -> URL {
-        let bundled = Bundle.main.url(forResource: "ffmpeg", withExtension: nil)
-        if let bundled { return bundled }
-
-        let envCandidates = (ProcessInfo.processInfo.environment["PATH"] ?? "")
-            .split(separator: ":")
-            .map { String($0) + "/ffmpeg" }
-
-        let candidates = envCandidates + [
-            "/opt/homebrew/bin/ffmpeg",
-            "/usr/local/bin/ffmpeg",
-            "/usr/bin/ffmpeg"
-        ]
+        let candidates = Self.ffmpegCandidatePaths()
 
         for path in candidates where FileManager.default.isExecutableFile(atPath: path) {
             return URL(fileURLWithPath: path)

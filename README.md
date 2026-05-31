@@ -6,6 +6,10 @@ SubMergePro 是一个面向 macOS 的字幕压制工具，用 SwiftUI 重写自�
 ![Swift](https://img.shields.io/badge/Swift-5-orange)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+| 主界面 | 字幕样式 |
+| --- | --- |
+| ![SubMergePro 主界面](docs/assets/submergepro-main.png) | ![SubMergePro 字幕样式页](docs/assets/submergepro-style.png) |
+
 ## 功能
 
 - 批量添加视频文件或整个文件夹
@@ -69,6 +73,7 @@ swift build
 ```bash
 make doctor
 make build
+make test
 make xcode-build
 ```
 
@@ -94,6 +99,7 @@ docs/             发布、FFmpeg 和路线图文档
 
 ```bash
 swift build
+swift test
 xcodebuild -project SubMergeProMac.xcodeproj -scheme SubMergeProMac -configuration Debug -destination 'platform=macOS' build
 ```
 

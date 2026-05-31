@@ -6,8 +6,12 @@ import UniformTypeIdentifiers
 @MainActor
 final class SubMergeViewModel: ObservableObject {
     @Published var items: [VideoItem] = []
-    @Published var renderOptions = VideoRenderOptions()
-    @Published var subtitleAppearance = SubtitleAppearance()
+    @Published var renderOptions = VideoRenderOptions() {
+        didSet { settingsStore.save(renderOptions) }
+    }
+    @Published var subtitleAppearance = SubtitleAppearance() {
+        didSet { settingsStore.save(subtitleAppearance) }
+    }
     @Published var isRenderingAll = false
     @Published var aboutPresented = false
     @Published var previewPresented = false
@@ -35,11 +39,18 @@ final class SubMergeViewModel: ObservableObject {
     ]
 
     private let ffmpegService = FFmpegService()
+    private let settingsStore = AppSettingsStore()
     private let supportedVideoExtensions = ["mp4", "mov", "avi", "mkv"]
     private let defaultStylePreviewText = "这是一行字幕预览"
     private var previewDebounceTask: Task<Void, Never>?
     private var previewRequestID = UUID()
     private var isCancelRequested = false
+
+    init() {
+        renderOptions = settingsStore.loadRenderOptions()
+        subtitleAppearance = settingsStore.loadSubtitleAppearance()
+        alertIfFFmpegIsMissing()
+    }
 
     var isRendering: Bool {
         isRenderingAll || items.contains { $0.status == .processing }
@@ -216,6 +227,14 @@ final class SubMergeViewModel: ObservableObject {
             isCancelling = true
         }
         FFmpegService.terminateActiveRenderProcess()
+    }
+
+    func checkFFmpegAvailability() {
+        if let url = FFmpegService.availableFFmpegURL() {
+            alertMessage = "已检测到 FFmpeg：\n\(url.path)"
+        } else {
+            alertIfFFmpegIsMissing()
+        }
     }
 
     func showPreview() {
@@ -502,5 +521,54 @@ final class SubMergeViewModel: ObservableObject {
         for index in items.indices {
             items[index].index = index + 1
         }
+    }
+
+    private func alertIfFFmpegIsMissing() {
+        guard FFmpegService.availableFFmpegURL() == nil else { return }
+        alertMessage = """
+        未检测到 FFmpeg，字幕合成和预览暂时不能使用。
+
+        推荐安装方式：
+        brew install ffmpeg
+
+        已检查路径：
+        \(FFmpegService.ffmpegCandidatePaths().joined(separator: "\n"))
+        """
+    }
+}
+
+private final class AppSettingsStore {
+    private let defaults: UserDefaults
+    private let renderOptionsKey = "SubMergePro.renderOptions"
+    private let subtitleAppearanceKey = "SubMergePro.subtitleAppearance"
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
+
+    func loadRenderOptions() -> VideoRenderOptions {
+        load(VideoRenderOptions.self, forKey: renderOptionsKey) ?? VideoRenderOptions()
+    }
+
+    func loadSubtitleAppearance() -> SubtitleAppearance {
+        load(SubtitleAppearance.self, forKey: subtitleAppearanceKey) ?? SubtitleAppearance()
+    }
+
+    func save(_ value: VideoRenderOptions) {
+        save(value, forKey: renderOptionsKey)
+    }
+
+    func save(_ value: SubtitleAppearance) {
+        save(value, forKey: subtitleAppearanceKey)
+    }
+
+    private func load<T: Decodable>(_ type: T.Type, forKey key: String) -> T? {
+        guard let data = defaults.data(forKey: key) else { return nil }
+        return try? JSONDecoder().decode(type, from: data)
+    }
+
+    private func save<T: Encodable>(_ value: T, forKey key: String) {
+        guard let data = try? JSONEncoder().encode(value) else { return }
+        defaults.set(data, forKey: key)
     }
 }

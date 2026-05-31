@@ -25,8 +25,8 @@ jobs:
           xcodebuild -version
           swift --version
 
-      - name: Swift package build
-        run: swift build
+      - name: Swift package tests
+        run: swift test
 
       - name: Xcode build
         run: |

@@ -15,6 +15,7 @@ let baseExcludes = [
     "README_中文说明.md",
     "Resources/Info.plist",
     "SECURITY.md",
+    "Tests",
     "docs",
     "scripts",
     "SubMergeProMac.xcodeproj"
@@ -53,6 +54,11 @@ let package = Package(
             resources: [
                 .process("Resources")
             ]
+        ),
+        .testTarget(
+            name: "SubMergeProMacTests",
+            dependencies: ["SubMergeProMac"],
+            path: "Tests/SubMergeProMacTests"
         )
     ]
 )

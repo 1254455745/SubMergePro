@@ -18,6 +18,10 @@
 		001A00010000000100000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 001B00010000000100000009 /* Assets.xcassets */; };
 		001A0001000000010000000A /* SubMergeProIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 001B0001000000010000000A /* SubMergeProIcon.png */; };
 		001A0001000000010000000B /* SubtitlePreviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B0001000000010000000D /* SubtitlePreviewService.swift */; };
+		001A0001000000010000000C /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B0001000000010000000E /* Components.swift */; };
+		001A0001000000010000000D /* StyleStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B0001000000010000000F /* StyleStudioView.swift */; };
+		001A0001000000010000000E /* PreviewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B00010000000100000010 /* PreviewSheet.swift */; };
+		001A0001000000010000000F /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B00010000000100000011 /* ViewExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +38,10 @@
 		001B0001000000010000000B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		001B0001000000010000000C /* SubMergeProMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SubMergeProMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		001B0001000000010000000D /* SubtitlePreviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitlePreviewService.swift; sourceTree = "<group>"; };
+		001B0001000000010000000E /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		001B0001000000010000000F /* StyleStudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleStudioView.swift; sourceTree = "<group>"; };
+		001B00010000000100000010 /* PreviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSheet.swift; sourceTree = "<group>"; };
+		001B00010000000100000011 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +108,10 @@
 			isa = PBXGroup;
 			children = (
 				001B00010000000100000008 /* ContentView.swift */,
+				001B0001000000010000000E /* Components.swift */,
+				001B0001000000010000000F /* StyleStudioView.swift */,
+				001B00010000000100000010 /* PreviewSheet.swift */,
+				001B00010000000100000011 /* ViewExtensions.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -194,13 +206,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				001A00010000000100000008 /* ContentView.swift in Sources */,
+				001A0001000000010000000C /* Components.swift in Sources */,
 				001A00010000000100000006 /* FFmpegService.swift in Sources */,
+				001A0001000000010000000E /* PreviewSheet.swift in Sources */,
 				001A00010000000100000005 /* SRTConverter.swift in Sources */,
 				001A0001000000010000000B /* SubtitlePreviewService.swift in Sources */,
+				001A0001000000010000000D /* StyleStudioView.swift in Sources */,
 				001A00010000000100000004 /* SubtitleStyleBuilder.swift in Sources */,
 				001A00010000000100000007 /* SubMergeViewModel.swift in Sources */,
 				001A00010000000100000001 /* SubMergeProMacApp.swift in Sources */,
 				001A00010000000100000002 /* VideoItem.swift in Sources */,
+				001A0001000000010000000F /* ViewExtensions.swift in Sources */,
 				001A00010000000100000003 /* VideoMetadataService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
