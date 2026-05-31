@@ -37,7 +37,7 @@ brew install ffmpeg
 - `/usr/local/bin/ffmpeg`
 - `/usr/bin/ffmpeg`
 
-## 本地运行
+## 开发
 
 用 Xcode 打开：
 
@@ -70,71 +70,9 @@ swift build
 make doctor
 make build
 make xcode-build
-make release
 ```
 
-## 打包发布
-
-生成 Release 版 `.app`、`.zip`、`.dmg` 和校验文件：
-
-```bash
-scripts/build_release.sh
-```
-
-输出文件会生成到 `dist/` 目录。
-
-### 签名说明
-
-当前自动构建产物没有使用 Apple Developer ID 签名和公证。第一次打开下载版 app 时，macOS 可能提示无法验证开发者；正式分发前建议接入 Developer ID 签名和 notarization。
-
-完整发布流程见 [docs/RELEASING.md](docs/RELEASING.md)。
-
-## 版本号
-
-版本号由 Xcode 工程中的 `MARKETING_VERSION` 和 `CURRENT_PROJECT_VERSION` 控制，并会写入最终 app 的 `Info.plist`。
-
-更新版本：
-
-```bash
-scripts/bump_version.sh 1.1.0
-```
-
-指定构建号：
-
-```bash
-scripts/bump_version.sh 1.1.0 12
-```
-
-推荐发布流程：
-
-```bash
-scripts/bump_version.sh 1.1.0
-git add .
-git commit -m "Release 1.1.0"
-git tag v1.1.0
-git push origin main --tags
-```
-
-推送 `v*.*.*` 标签后，GitHub Actions 会自动构建软件并上传到 GitHub Releases。
-
-## 自动化
-
-仓库包含两条 GitHub Actions 工作流：
-
-- `CI`: push 和 pull request 时自动编译项目
-- `Release`: 推送版本标签时自动构建 `.zip`、`.dmg` 并发布到 GitHub Releases
-
-如果想手动从本机发布，先登录 GitHub CLI：
-
-```bash
-gh auth login
-```
-
-然后执行：
-
-```bash
-scripts/publish_release.sh v1.1.0
-```
+维护者发布流程、FFmpeg 分发说明和后续计划分别见 [docs/RELEASING.md](docs/RELEASING.md)、[docs/FFMPEG.md](docs/FFMPEG.md) 和 [docs/ROADMAP.md](docs/ROADMAP.md)。
 
 ## 项目结构
 
