@@ -12,6 +12,7 @@ brew install ffmpeg
 
 The app checks:
 
+- User-selected `ffmpeg` path saved from the app
 - Bundled `ffmpeg` inside the app resources
 - `PATH`
 - `/opt/homebrew/bin/ffmpeg`
@@ -42,3 +43,5 @@ ffmpeg -version
 ```
 
 If Homebrew installed FFmpeg but GUI launches still cannot find it, the app should still detect `/opt/homebrew/bin/ffmpeg` or `/usr/local/bin/ffmpeg`.
+
+Users can also select a local FFmpeg executable from the export settings area in the app.

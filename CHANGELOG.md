@@ -6,6 +6,18 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-05-31
+
+### Added
+
+- Add FFmpeg readiness status in export settings.
+- Allow users to choose a local FFmpeg executable from the app.
+
+### Changed
+
+- Make FFmpeg controls smaller and less prominent.
+- Improve the missing FFmpeg guidance message.
+
 ## [1.0.1] - 2026-05-31
 
 ### Changed

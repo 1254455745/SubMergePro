@@ -106,16 +106,18 @@ struct CircleIconButton: View {
 struct CompactIconButton: View {
     let systemName: String
     let helpText: String
+    var size: CGFloat = 28
+    var symbolSize: CGFloat = 12
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.black.opacity(0.72))
-                .frame(width: 36, height: 34)
-                .background(Color.black.opacity(0.04))
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .font(.system(size: symbolSize, weight: .semibold))
+                .foregroundStyle(.black.opacity(0.58))
+                .frame(width: size, height: size)
+                .background(Color.black.opacity(0.025))
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
         .buttonStyle(.plain)
         .help(helpText)

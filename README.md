@@ -35,6 +35,7 @@ brew install ffmpeg
 
 应用会依次查找这些位置：
 
+- 你在应用里手动选择的 `ffmpeg`
 - 应用包内的 `ffmpeg`
 - 当前环境变量 `PATH`
 - `/opt/homebrew/bin/ffmpeg`

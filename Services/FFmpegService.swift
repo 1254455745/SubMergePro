@@ -13,6 +13,7 @@ struct RenderTask {
 actor FFmpegService {
     private var process: Process?
     private static let processLock = NSLock()
+    private static let customFFmpegPathKey = "SubMergePro.customFFmpegPath"
     nonisolated(unsafe) private static var activeRenderProcess: Process?
 
     private final class CaptureBox: @unchecked Sendable {
@@ -27,7 +28,29 @@ actor FFmpegService {
         return nil
     }
 
+    nonisolated static func customFFmpegURL() -> URL? {
+        guard let path = UserDefaults.standard.string(forKey: customFFmpegPathKey), !path.isEmpty else {
+            return nil
+        }
+        return URL(fileURLWithPath: path)
+    }
+
+    nonisolated static func setCustomFFmpegURL(_ url: URL?) {
+        if let url {
+            UserDefaults.standard.set(url.path, forKey: customFFmpegPathKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: customFFmpegPathKey)
+        }
+    }
+
+    nonisolated static func isValidFFmpegURL(_ url: URL) -> Bool {
+        var isDirectory: ObjCBool = false
+        let exists = FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory)
+        return exists && !isDirectory.boolValue && FileManager.default.isExecutableFile(atPath: url.path)
+    }
+
     nonisolated static func ffmpegCandidatePaths() -> [String] {
+        let custom = customFFmpegURL()?.path
         let bundled = Bundle.main.url(forResource: "ffmpeg", withExtension: nil)?.path
         let envCandidates = (ProcessInfo.processInfo.environment["PATH"] ?? "")
             .split(separator: ":")
@@ -40,7 +63,7 @@ actor FFmpegService {
         ]
 
         var seen = Set<String>()
-        return ([bundled].compactMap { $0 } + envCandidates + defaults).filter { path in
+        return ([custom, bundled].compactMap { $0 } + envCandidates + defaults).filter { path in
             guard !seen.contains(path) else { return false }
             seen.insert(path)
             return true

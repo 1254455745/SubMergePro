@@ -3,6 +3,30 @@ import AVFoundation
 import Foundation
 import UniformTypeIdentifiers
 
+enum FFmpegAvailability: Equatable {
+    case available(URL)
+    case missing
+
+    var isAvailable: Bool {
+        if case .available = self { return true }
+        return false
+    }
+
+    var statusText: String {
+        switch self {
+        case .available:
+            return "已就绪"
+        case .missing:
+            return "未配置"
+        }
+    }
+
+    var pathText: String? {
+        guard case .available(let url) = self else { return nil }
+        return url.path
+    }
+}
+
 @MainActor
 final class SubMergeViewModel: ObservableObject {
     @Published var items: [VideoItem] = []
@@ -24,6 +48,7 @@ final class SubMergeViewModel: ObservableObject {
     @Published var previewImage: NSImage?
     @Published var previewIsRendering = false
     @Published var previewRenderError: String?
+    @Published private(set) var ffmpegAvailability: FFmpegAvailability = .missing
     @Published private(set) var isCancelling = false
 
     let formatOptions = ["MP4", "MOV", "AVI", "MKV"]
@@ -49,7 +74,7 @@ final class SubMergeViewModel: ObservableObject {
     init() {
         renderOptions = settingsStore.loadRenderOptions()
         subtitleAppearance = settingsStore.loadSubtitleAppearance()
-        alertIfFFmpegIsMissing()
+        refreshFFmpegAvailability()
     }
 
     var isRendering: Bool {
@@ -230,11 +255,41 @@ final class SubMergeViewModel: ObservableObject {
     }
 
     func checkFFmpegAvailability() {
+        refreshFFmpegAvailability()
         if let url = FFmpegService.availableFFmpegURL() {
-            alertMessage = "已检测到 FFmpeg：\n\(url.path)"
+            alertMessage = "FFmpeg 已就绪：\n\(url.path)"
         } else {
-            alertIfFFmpegIsMissing()
+            showFFmpegSetupGuide()
         }
+    }
+
+    func chooseFFmpegExecutable() {
+        guard !isOperationLocked else { return }
+
+        let panel = NSOpenPanel()
+        panel.title = "选择 FFmpeg"
+        panel.message = "请选择名为 ffmpeg 的可执行文件。"
+        panel.prompt = "使用这个文件"
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        guard FFmpegService.isValidFFmpegURL(url) else {
+            alertMessage = """
+            这个文件不能作为 FFmpeg 使用。
+
+            请选择可执行的 ffmpeg 文件。常见位置：
+            /opt/homebrew/bin/ffmpeg
+            /usr/local/bin/ffmpeg
+            """
+            return
+        }
+
+        FFmpegService.setCustomFFmpegURL(url)
+        refreshFFmpegAvailability()
+        alertMessage = "已使用这个 FFmpeg：\n\(url.path)"
     }
 
     func showPreview() {
@@ -523,13 +578,22 @@ final class SubMergeViewModel: ObservableObject {
         }
     }
 
-    private func alertIfFFmpegIsMissing() {
-        guard FFmpegService.availableFFmpegURL() == nil else { return }
-        alertMessage = """
-        未检测到 FFmpeg，字幕合成和预览暂时不能使用。
+    private func refreshFFmpegAvailability() {
+        if let url = FFmpegService.availableFFmpegURL() {
+            ffmpegAvailability = .available(url)
+        } else {
+            ffmpegAvailability = .missing
+        }
+    }
 
-        推荐安装方式：
+    private func showFFmpegSetupGuide() {
+        alertMessage = """
+        还没有找到 FFmpeg，字幕预览和合成暂时不能使用。
+
+        推荐安装：
         brew install ffmpeg
+
+        如果你已经下载了 FFmpeg，可以点击状态旁边的文件夹图标，选择本地 ffmpeg 文件。
 
         已检查路径：
         \(FFmpegService.ffmpegCandidatePaths().joined(separator: "\n"))

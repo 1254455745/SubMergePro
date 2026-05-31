@@ -520,9 +520,11 @@ struct SettingsPanel: View {
                     CapsuleTextButton(title: "浏览") {
                         viewModel.chooseOutputDirectory()
                     }
-                    CompactIconButton(systemName: "terminal", helpText: "检测 FFmpeg") {
-                        viewModel.checkFFmpegAvailability()
-                    }
+                    FFmpegStatusControl(
+                        availability: viewModel.ffmpegAvailability,
+                        checkAction: viewModel.checkFFmpegAvailability,
+                        chooseAction: viewModel.chooseFFmpegExecutable
+                    )
                 }
             }
             .disabled(viewModel.isOperationLocked)
@@ -536,6 +538,49 @@ struct SettingsPanel: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(Color.black.opacity(0.08), lineWidth: 1)
         )
+    }
+}
+
+struct FFmpegStatusControl: View {
+    let availability: FFmpegAvailability
+    let checkAction: () -> Void
+    let chooseAction: () -> Void
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Button(action: checkAction) {
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(statusColor)
+                        .frame(width: 6, height: 6)
+                    Text(availability.statusText)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.black.opacity(0.56))
+                }
+                .padding(.horizontal, 7)
+                .frame(height: 28)
+                .background(Color.black.opacity(0.018))
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            }
+            .buttonStyle(.plain)
+            .help(statusHelpText)
+            .accessibilityLabel(Text("FFmpeg \(availability.statusText)"))
+
+            CompactIconButton(systemName: "folder", helpText: "选择本地 FFmpeg", size: 28, symbolSize: 11) {
+                chooseAction()
+            }
+        }
+    }
+
+    private var statusColor: Color {
+        availability.isAvailable ? Color.green : Color.orange
+    }
+
+    private var statusHelpText: String {
+        if let path = availability.pathText {
+            return "FFmpeg 已就绪：\(path)"
+        }
+        return "未找到 FFmpeg，点击查看安装说明"
     }
 }
 
