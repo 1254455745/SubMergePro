@@ -385,7 +385,7 @@ struct StyleStudioPreviewPanel: View {
                         .opacity(viewModel.isOperationLocked ? 0.45 : 1)
                     }
                     .padding(16)
-                    .background(Color.white.opacity(0.92))
+                    .background(Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                     .overlay(
                         RoundedRectangle(cornerRadius: 18, style: .continuous)
@@ -426,7 +426,7 @@ struct StyleStudioPreviewPanel: View {
             }
             .padding(16)
             .frame(width: contentWidth, alignment: .leading)
-            .background(Color.white.opacity(0.92))
+            .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
@@ -517,7 +517,7 @@ struct StudioSectionCard<Content: View>: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.92))
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 22, style: .continuous)

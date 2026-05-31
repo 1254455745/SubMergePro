@@ -6,10 +6,12 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 
 ## [Unreleased]
 
-### Added
+## [1.0.1] - 2026-05-31
 
-- GitHub-ready README, contribution guide, issue templates, CI workflow, release workflow, and local release scripts.
-- Version bump script for keeping Xcode project version and build numbers consistent.
+### Changed
+
+- Show only the public app version in the About sheet.
+- Replace the prominent FFmpeg detection text button with a compact icon control.
 
 ## [1.0.0] - 2026-05-31
 
@@ -21,3 +23,5 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 - Single and batch subtitle burn-in workflow through FFmpeg.
 - Subtitle style controls for font, color, outline, shadow, position, and background.
 - Video metadata display and preview frame rendering.
+- GitHub-ready README, contribution guide, issue templates, CI workflow, release workflow, and local release scripts.
+- Version bump script for keeping Xcode project version and build numbers consistent.

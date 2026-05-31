@@ -50,6 +50,9 @@ private final class WindowConfiguratorView: NSView {
     private func applyWindowConfiguration() {
         guard let window else { return }
 
+        window.isOpaque = true
+        window.backgroundColor = .white
+
         let minimumSize = NSSize(width: 1196, height: 768)
         if window.minSize != minimumSize {
             window.minSize = minimumSize

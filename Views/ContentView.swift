@@ -141,7 +141,7 @@ struct SidebarRail: View {
         .padding(.vertical, 18)
         .frame(width: 88)
         .frame(maxHeight: .infinity, alignment: .top)
-        .background(Color.white.opacity(0.62))
+        .background(Color.white)
         .overlay(alignment: .trailing) {
             Rectangle()
                 .fill(Color.black.opacity(0.06))
@@ -260,7 +260,7 @@ struct VideoTableCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: height)
-        .background(.white.opacity(0.88))
+        .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 18, style: .continuous)
@@ -520,7 +520,7 @@ struct SettingsPanel: View {
                     CapsuleTextButton(title: "浏览") {
                         viewModel.chooseOutputDirectory()
                     }
-                    CapsuleTextButton(title: "检测 FFmpeg") {
+                    CompactIconButton(systemName: "terminal", helpText: "检测 FFmpeg") {
                         viewModel.checkFFmpegAvailability()
                     }
                 }
@@ -530,7 +530,7 @@ struct SettingsPanel: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.white.opacity(0.9))
+        .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 18, style: .continuous)

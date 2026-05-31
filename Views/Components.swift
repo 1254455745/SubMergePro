@@ -35,7 +35,7 @@ struct AppIconBadge: View {
             }
         }
         .frame(width: 54, height: 54)
-        .background(Color.white.opacity(0.9))
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
@@ -100,6 +100,26 @@ struct CircleIconButton: View {
         }
         .buttonStyle(.plain)
         .help(helpText ?? "")
+    }
+}
+
+struct CompactIconButton: View {
+    let systemName: String
+    let helpText: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(.black.opacity(0.72))
+                .frame(width: 36, height: 34)
+                .background(Color.black.opacity(0.04))
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .help(helpText)
+        .accessibilityLabel(Text(helpText))
     }
 }
 
