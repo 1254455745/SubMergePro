@@ -9,6 +9,8 @@
 xcuserdata/
 *.xcuserstate
 DerivedData/
+build/
+dist/
 
 # Local logs and temporary files
 *.log

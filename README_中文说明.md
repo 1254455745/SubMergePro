@@ -1,5 +1,7 @@
 # SubMergePro Mac 版说明
 
+> 这份文件保留为早期交接说明。GitHub 首页和最新使用/发版流程请看 `README.md`。
+
 这是按照你原来的 Python 软件功能，重新整理出来的一套 `Swift + SwiftUI` 版本源码结构。
 
 ## 你最关心的几个文件
